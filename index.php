@@ -32,5 +32,6 @@ if ($form->model['password'] == '') {
 };
 session_start();
 $_SESSION['name'] = $form->model['name'];
+$form->model->save();
 return new \atk4\ui\jsExpression('document.location = "main.php" ');
 });

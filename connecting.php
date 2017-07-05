@@ -40,6 +40,17 @@ function init() {
 }
 }
 
+class librarian extends \atk4\data\Model {
+	public $table = 'librarians';
+
+function init() {
+	parent::init();
+	$this->addField('name');
+	$this->addField('surname');
+  $this->addField('password',['type'=>'password']);
+}
+}
+
 class borrow extends \atk4\data\Model {
 	public $table = 'borrow';
 
