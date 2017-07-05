@@ -13,8 +13,8 @@ if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     $db = new \atk4\data\Persistence_SQL($dsn[0].';charset=utf8', $dsn[1], $dsn[2]);
 } else {
     //$db = \atk4\db\Persistence::connect('mysql://user:pass@localhost/main');
-    //$db =  \atk4\db\Persistence::connect('mysql://user:pass@localhost/main'); */
-    $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=main;charset=utf8', 'root', '');
+    //$db = \atk4\db\Persistence::connect('mysql://user:pass@localhost/mydb');
+    $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
 }
 
 class book extends \atk4\data\Model {
@@ -24,7 +24,7 @@ function init() {
 	parent::init();
 	$this->addField('book_title');
 	$this->addField('author');
-	$this->addField('year_published',['type'=>'money']);
+	$this->addField('year_published',['type'=>'date']);
 }
 }
 

@@ -7,20 +7,22 @@ use \atk4\ui\Button;
 $app = new \atk4\ui\App('Registration');
 $app->initLayout('Centered');
 
-class user extends \atk4\data\Model {
-	public $table = 'users';
+class student extends \atk4\data\Model {
+	public $table = 'students';
 
 function init() {
 	parent::init();
 	$this->addField('name');
+  $this->addField('surname');
+  $this->addField('grade');
   $this->addField('password', ['type'=>'password']);
 }
 }
 
-$db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=register;charset=utf8', 'root', '');
+$db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
 
 $form = $app->layout->add('Form');
-$form->setModel(new user($db));
+$form->setModel(new student($db));
 $form->onSubmit(function($form) {
 if ($form->model['name'] == '') {
   return $form->error('name',"This place can't be empty.");
