@@ -1,13 +1,14 @@
 <?php
 
 require 'vendor/autoload.php';
+require 'connecting.php';
 
 use \atk4\ui\Button;
 
 $app = new \atk4\ui\App('Registration');
 $app->initLayout('Centered');
 
-class student extends \atk4\data\Model {
+/* class student extends \atk4\data\Model {
 	public $table = 'students';
 
 function init() {
@@ -19,7 +20,7 @@ function init() {
 }
 }
 
-$db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
+$db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', ''); */
 
 $form = $app->layout->add('Form');
 $form->setModel(new student($db));
