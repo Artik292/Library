@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июл 09 2017 г., 10:13
+-- Время создания: Июл 09 2017 г., 19:22
 -- Версия сервера: 10.1.21-MariaDB
 -- Версия PHP: 5.6.30
 
@@ -30,19 +30,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `books` (
   `id` int(11) NOT NULL,
-  `book_title` varchar(50) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
   `author` varchar(50) DEFAULT NULL,
-  `year_published` date DEFAULT NULL
+  `year_published` date DEFAULT NULL,
+  `total_quantity` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `books`
 --
 
-INSERT INTO `books` (`id`, `book_title`, `author`, `year_published`) VALUES
-(1, 'test', 'test', '2015-11-10'),
-(2, 'name', 'author', NULL),
-(3, 'name', 'author', '2017-07-03');
+INSERT INTO `books` (`id`, `name`, `author`, `year_published`, `total_quantity`) VALUES
+(1, 'test', 'test', '2015-11-10', 0),
+(2, 'name', 'author', NULL, 0),
+(3, 'name', 'author', '2017-07-03', 0);
 
 -- --------------------------------------------------------
 
@@ -54,6 +55,7 @@ CREATE TABLE `borrow` (
   `id` int(11) NOT NULL,
   `date_loan` datetime DEFAULT NULL,
   `date_return` datetime DEFAULT NULL,
+  `quantity` int(10) UNSIGNED NOT NULL,
   `returned` tinyint(4) DEFAULT NULL,
   `student_id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL
@@ -111,7 +113,10 @@ INSERT INTO `students` (`id`, `name`, `surname`, `grade`, `password`) VALUES
 (18, 'admin', '', '', 'admin'),
 (19, 'admin', '', '', 'a'),
 (20, 'admin', '', '', 'kl'),
-(21, 'awdaw', '', '', 'awdaw');
+(21, 'awdaw', '', '', 'awdaw'),
+(22, 'lol', '', '', 'lol'),
+(23, 'admin', '', '', 'admin'),
+(24, 'a', 'b', 'c', 'e');
 
 --
 -- Индексы сохранённых таблиц
@@ -166,7 +171,7 @@ ALTER TABLE `librarians`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
