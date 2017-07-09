@@ -17,6 +17,6 @@ if (isset($_SESSION['user_name']) and $_SESSION['user_name'] == 'librarian') {
   $layout->leftMenu->addItem(['New book','icon'=>'add circle'],['new_book']);
 }
 
-$layout->leftMenu->addItem(['Rent book(s)','icon'=>'book'],['places']);
+$layout->leftMenu->addItem(['Rent book(s)','icon'=>'book'],['rent']);
 
 $layout->leftMenu->addItem(['Logout','icon'=>'external'],['logout']);
