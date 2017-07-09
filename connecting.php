@@ -22,7 +22,7 @@ class book extends \atk4\data\Model {
 
 function init() {
 	parent::init();
-	$this->addField('book_title');
+	$this->addField('name',['caption'=>'Book title']);
 	$this->addField('author');
 	$this->addField('year_published',['type'=>'date']);
   $this->addField('total_quantity');
@@ -61,7 +61,7 @@ function init() {
 	$this->addField('date_return',['type'=>'date']);
 	$this->addField('returned');
   $this->addField('quantity');
-  $this->hasMany('book_id', new book());
+  $this->hasOne('book_id', new book());
   $this->hasOne('student_id', new student());
 }
 }

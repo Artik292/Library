@@ -11,7 +11,7 @@ $app->initLayout('Admin');
 require 'visual.php';
 
 $form = $app->layout->add('Form');
-$form->setModel(new book($db));
+$form->setModel(new borrow($db));
 $form->onSubmit(function($form) {
 if ($form->model['name'] == '') {
   return $form->error('name',"This place can't be empty.");
