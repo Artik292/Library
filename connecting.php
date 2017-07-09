@@ -25,6 +25,7 @@ function init() {
 	$this->addField('book_title');
 	$this->addField('author');
 	$this->addField('year_published',['type'=>'date']);
+  $this->addField('total_quantity');
 }
 }
 
@@ -59,6 +60,7 @@ function init() {
 	$this->addField('date_loan',['type'=>'date']);
 	$this->addField('date_return',['type'=>'date']);
 	$this->addField('returned');
+  $this->addField('quantity');
   $this->hasMany('book_id', new book());
   $this->hasOne('student_id', new student());
 }
