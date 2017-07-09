@@ -6,6 +6,6 @@ require 'connecting.php';
 session_start();
 
 $app = new \atk4\ui\App('Library');
-$app->initLayout('admin');
+$app->initLayout('Admin');
 
 require 'visual.php';
