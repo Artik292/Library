@@ -2,6 +2,10 @@
 
 //require 'vendor/autoload.php';
 
+if ((!isset($_SESSION['status']))) {
+  header('Location: logout.php');
+}
+
 use \atk4\ui\Button;
 
 $app = new \atk4\ui\App('Library');
@@ -11,12 +15,12 @@ $layout = $app->layout;
 
 $layout->leftMenu->addItem(['Main page','icon'=>'building'],['main']);
 
-if (isset($_SESSION['user_name']) and $_SESSION['user_name'] == 'admin') {
+if ($_SESSION['status'] == 'admin') {
     $app->layout->add(['Message','WOOOOOORK']);
   $layout->leftMenu->addItem(['Users','icon'=>'users'],['admin']);
 }
 
-if (isset($_SESSION['user_name']) and $_SESSION['user_name'] == 'librarian') {
+if ($_SESSION['status'] == 'librarian') {
   $layout->leftMenu->addItem(['New book','icon'=>'add circle'],['new_book']);
 }
 

@@ -31,8 +31,16 @@ if ($form->model['name'] == '') {
 if ($form->model['password'] == '') {
   return $form->error('password',"This place can't be empty.");
 };
-session_start();
 $_SESSION['name'] = $form->model['name'];
+
+if ($form->model['name'] == 'librarian') {
+  $_SESSION['status'] = 'librarian';
+} elseif ($form->model['name'] == 'admin') {
+  $_SESSION['status'] = 'admin';
+} else {
+  $_SESSION['status'] = 'student';
+}
+
 $form->model->save();
 return new \atk4\ui\jsExpression('document.location = "main.php" ');
 });
