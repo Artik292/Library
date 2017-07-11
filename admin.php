@@ -3,4 +3,6 @@
 require 'connecting.php';
 require 'visual.php';
 
-$app->layout->add(['Message','NOT READY YET']);
+$grid = $layout->add('CRUD');
+$grid->setModel(new student($db));
+$grid->addQuickSearch(['name','surname','grade']);

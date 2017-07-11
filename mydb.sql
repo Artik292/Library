@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июл 09 2017 г., 19:22
+-- Время создания: Июл 11 2017 г., 17:12
 -- Версия сервера: 10.1.21-MariaDB
 -- Версия PHP: 5.6.30
 
@@ -56,10 +56,18 @@ CREATE TABLE `borrow` (
   `date_loan` datetime DEFAULT NULL,
   `date_return` datetime DEFAULT NULL,
   `quantity` int(10) UNSIGNED NOT NULL,
-  `returned` tinyint(4) DEFAULT NULL,
+  `returned` enum('yes','no') DEFAULT 'no',
   `student_id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `borrow`
+--
+
+INSERT INTO `borrow` (`id`, `date_loan`, `date_return`, `quantity`, `returned`, `student_id`, `book_id`) VALUES
+(1, '2017-07-11 00:00:00', '2017-07-18 00:00:00', 1, '', 26, 1),
+(2, '2017-07-11 00:00:00', '2017-07-18 00:00:00', 4, 'no', 24, 1);
 
 -- --------------------------------------------------------
 
@@ -116,7 +124,15 @@ INSERT INTO `students` (`id`, `name`, `surname`, `grade`, `password`) VALUES
 (21, 'awdaw', '', '', 'awdaw'),
 (22, 'lol', '', '', 'lol'),
 (23, 'admin', '', '', 'admin'),
-(24, 'a', 'b', 'c', 'e');
+(24, 'a', 'b', 'c', 'e'),
+(25, 'Д', 'Д', 'Д', 'l'),
+(26, 'Arthur', 'Konevnikov', '11-b1', 'Password'),
+(27, 'admin', '', '', 'admin'),
+(28, 'admin', '', '', 'admin'),
+(29, 'librarian', '', '', 'lol'),
+(30, 'admin', '', '', 'l'),
+(31, 'librarian', '', '', 'm'),
+(32, 'd', '', '', 'd');
 
 --
 -- Индексы сохранённых таблиц
@@ -161,7 +177,7 @@ ALTER TABLE `books`
 -- AUTO_INCREMENT для таблицы `borrow`
 --
 ALTER TABLE `borrow`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `librarians`
 --
@@ -171,7 +187,7 @@ ALTER TABLE `librarians`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --

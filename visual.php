@@ -16,11 +16,10 @@ $layout = $app->layout;
 $layout->leftMenu->addItem(['Main page','icon'=>'building'],['main']);
 
 if ($_SESSION['status'] == 'admin') {
-    $app->layout->add(['Message','WOOOOOORK']);
   $layout->leftMenu->addItem(['Users','icon'=>'users'],['admin']);
 }
 
-if ($_SESSION['status'] == 'librarian') {
+if ($_SESSION['status'] != 'student') {
   $layout->leftMenu->addItem(['New book','icon'=>'add circle'],['new_book']);
 }
 
