@@ -22,15 +22,17 @@ function init() {
 
 $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', ''); */
 
+/*$button = new Button();
+$button->set('Log in');
+$button->set(['primary'=>true]);
+$button->set(['size big'=>true]);
+$button->link('login.php');
+$app->add($button); */
+
 $form = $app->layout->add('Form');
 $form->setModel(new student($db));
 $form->onSubmit(function($form) {
-if ($form->model['name'] == '') {
-  return $form->error('name',"This place can't be empty.");
-};
-if ($form->model['password'] == '') {
-  return $form->error('password',"This place can't be empty.");
-};
+  
 $_SESSION['name'] = $form->model['name'];
 
 if ($form->model['name'] == 'librarian') {

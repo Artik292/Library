@@ -19,27 +19,27 @@ if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
 }
 
-class book extends \atk4\data\Model {
-	public $table = 'books';
-
-function init() {
-	parent::init();
-	$this->addField('name',['caption'=>'Book title']);
-	$this->addField('author');
-	$this->addField('year_published',['type'=>'date']);
-  $this->addField('total_quantity');
-}
-}
-
 class student extends \atk4\data\Model {
 	public $table = 'students';
 
 function init() {
 	parent::init();
-	$this->addField('name');
-	$this->addField('surname');
-	$this->addField('grade');
-  $this->addField('password',['type'=>'password']);
+	$this->addField('name',['required'=>'true']);
+	$this->addField('surname',['required'=>'true']);
+	$this->addField('grade',['required'=>'true']);
+  $this->addField('password',['type'=>'password','required'=>'true']);
+}
+}
+
+class book extends \atk4\data\Model {
+	public $table = 'books';
+
+function init() {
+	parent::init();
+	$this->addField('name',['caption'=>'Book title','required'=>'true']);
+	$this->addField('author');
+	$this->addField('year_published',['type'=>'date']);
+  $this->addField('total_quantity',['required'=>'true']);
 }
 }
 
@@ -48,9 +48,9 @@ class librarian extends \atk4\data\Model {
 
 function init() {
 	parent::init();
-	$this->addField('name');
-	$this->addField('surname');
-  $this->addField('password',['type'=>'password']);
+	$this->addField('name',['required'=>'true']);
+	$this->addField('surname',['required'=>'true']);
+  $this->addField('password',['type'=>'password','required'=>'true']);
 }
 }
 
@@ -60,10 +60,10 @@ if (isset($_SESSION['status']) and $_SESSION['status'] != 'student') {
 
   function init() {
   	parent::init();
-  	$this->addField('date_loan',['type'=>'date']);
-  	$this->addField('date_return',['type'=>'date']);
+  	$this->addField('date_loan',['type'=>'date','required'=>'true']);
+  	$this->addField('date_return',['type'=>'date','required'=>'true']);
   	$this->addField('returned');
-    $this->addField('quantity');
+    $this->addField('quantity',['required'=>'true']);
     $this->hasOne('book_id', new book());
     $this->hasOne('student_id', new student());
   }
@@ -75,9 +75,9 @@ if (isset($_SESSION['status']) and $_SESSION['status'] != 'student') {
 
   function init() {
   	parent::init();
-  	$this->addField('date_loan',['type'=>'date']);
-  	$this->addField('date_return',['type'=>'date']);
-    $this->addField('quantity');
+  	$this->addField('date_loan',['type'=>'date','required'=>'true']);
+  	$this->addField('date_return',['type'=>'date','required'=>'true']);
+    $this->addField('quantity',['required'=>'true']);
     $this->hasOne('book_id', new book());
     $this->hasOne('student_id', new student());
   }
