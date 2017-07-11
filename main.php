@@ -16,4 +16,4 @@ if (isset($_SESSION['user_name'])) {
 //$layout = $app->layout;
 $grid = $layout->add('Grid');
 $grid->setModel(new book($db));
-$grid->addQuickSearch(['book_title','author']);
+$grid->addQuickSearch(['name','author']);
