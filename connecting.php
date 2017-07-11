@@ -2,6 +2,8 @@
 
 require 'vendor/autoload.php';
 
+session_start();
+
 if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     preg_match('|([a-z]+)://([^:]*)(:(.*))?@([A-Za-z0-9\.-]*)(/([0-9a-zA-Z_/\.]*))|',
         $_ENV['CLEARDB_DATABASE_URL'],$matches);
