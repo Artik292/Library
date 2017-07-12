@@ -63,8 +63,9 @@ function init() {
   	$this->addField('date_return',['type'=>'date','required'=>'true']);
   	$this->addField('returned', ['type'=>'boolean']);
     $this->addField('quantity',['required'=>'true']);
-    $this->hasOne('student_id', new student());
     $this->hasOne('book_id', new book())
+        ->addTitle();
+    $this->hasOne('student_id', new student())
         ->addTitle();
   }
 
