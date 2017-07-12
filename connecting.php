@@ -61,7 +61,7 @@ function init() {
   	parent::init();
   	$this->addField('date_loan',['type'=>'date','required'=>'true']);
   	$this->addField('date_return',['type'=>'date','required'=>'true']);
-  	$this->addField('returned');
+  	$this->addField('returned', ['type'=>'boolean']);
     $this->addField('quantity',['required'=>'true']);
     $this->hasOne('book_id', new book());
     $this->hasOne('student_id', new student());
