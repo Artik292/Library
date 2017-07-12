@@ -54,7 +54,6 @@ function init() {
 }
 }
 
-if (isset($_SESSION['status']) and $_SESSION['status'] != 'student') {
   class borrow extends \atk4\data\Model {
   	public $table = 'borrow';
 
@@ -67,20 +66,6 @@ if (isset($_SESSION['status']) and $_SESSION['status'] != 'student') {
     $this->hasOne('book_id', new book());
     $this->hasOne('student_id', new student());
   }
-  }
 
-} else {
-  class borrow extends \atk4\data\Model {
-  	public $table = 'borrow';
-
-  function init() {
-  	parent::init();
-  	$this->addField('date_loan',['type'=>'date','required'=>'true']);
-  	$this->addField('date_return',['type'=>'date','required'=>'true']);
-    $this->addField('quantity',['required'=>'true']);
-    $this->hasOne('book_id', new book());
-    $this->hasOne('student_id', new student());
-  }
-  }
 
 }
