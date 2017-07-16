@@ -29,4 +29,4 @@ $layout->leftMenu->addItem(['Borrowers','icon'=>'users'],['borrowers']);
 
 $layout->leftMenu->addItem(['Logout','icon'=>'external'],['logout']);
 
-$layout->leftMenu->addItem(['test','icon'=>'external'],['romans']);
+$layout->leftMenu->addItem(['test','icon'=>'external'],['time']);

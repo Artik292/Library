@@ -1,9 +1,6 @@
 <?php
-
 require 'vendor/autoload.php';
-
 session_start();
-
 if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     preg_match('|([a-z]+)://([^:]*)(:(.*))?@([A-Za-z0-9\.-]*)(/([0-9a-zA-Z_/\.]*))|',
         $_ENV['CLEARDB_DATABASE_URL'],$matches);
@@ -18,10 +15,8 @@ if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     //$db = \atk4\db\Persistence::connect('mysql://user:pass@localhost/mydb');
     $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
 }
-
 class student extends \atk4\data\Model {
 	public $table = 'students';
-
 function init() {
 	parent::init();
 	$this->addField('name',['required'=>'true']);
@@ -30,10 +25,8 @@ function init() {
   $this->addField('password',['type'=>'password','required'=>'true']);
 }
 }
-
 class book extends \atk4\data\Model {
 	public $table = 'books';
-
 function init() {
 	parent::init();
 	$this->addField('name',['caption'=>'Book title','required'=>'true']);
@@ -42,10 +35,8 @@ function init() {
   $this->addField('total_quantity',['required'=>'true']);
 }
 }
-
 class librarian extends \atk4\data\Model {
 	public $table = 'librarians';
-
 function init() {
 	parent::init();
 	$this->addField('name',['required'=>'true']);
@@ -53,10 +44,8 @@ function init() {
   $this->addField('password',['type'=>'password','required'=>'true']);
 }
 }
-
   class borrow extends \atk4\data\Model {
   	public $table = 'borrow';
-
   function init() {
   	parent::init();
   	$this->addField('date_loan',['type'=>'date','required'=>'true']);
@@ -68,6 +57,4 @@ function init() {
     $this->hasOne('student_id', new student())
         ->addTitle();
   }
-
-
 }
