@@ -13,8 +13,7 @@ $layout->add(['Header', 'Calculating some totals']);
 // library.
 
 
-$unique_book_titles = (new book($db))
-    ->action('count');
+$unique_book_titles = (new book($db))->action('count');
 
 // Now that we have this count, we can execute it, which will retrieve value form the server:
 
@@ -54,7 +53,7 @@ $students->hasMany('Borrow', [new borrow(), 'their_field'=>'student_id']);
 // Now object $student has reference called 'Borrow'. The reference good for few things.
 // First you can traverse it!
 
-$students->load(24); // load any students
+$students->load(1); // load any students
 $layout->add(['Header', 'Borrowings for '.$students['name']]);
 $borrowings = $students->ref('Borrow');
 $layout->add('Table')->setModel($borrowings, ['book', 'quantity', 'returned']);

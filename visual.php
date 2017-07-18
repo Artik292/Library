@@ -29,4 +29,6 @@ $layout->leftMenu->addItem(['Borrowers','icon'=>'users'],['borrowers']);
 
 $layout->leftMenu->addItem(['Logout','icon'=>'external'],['logout']);
 
-$layout->leftMenu->addItem(['test','icon'=>'external'],['romans']);
+$layout->leftMenu->addItem(['Romans','icon'=>'external'],['romans']);
+
+$layout->leftMenu->addItem(['test','icon'=>'external'],['new_s_main']);
