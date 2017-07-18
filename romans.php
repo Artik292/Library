@@ -21,7 +21,7 @@ $unique_book_titles = (new book($db))
 
 $layout->add(['Label', 'Total unique books: ', 'detail'=>$unique_book_titles->getOne()]);
 
-// We can also calculate different formulas, lets see what's the total exemplars of books 
+// We can also calculate different formulas, lets see what's the total exemplars of books
 // are in the library.
 
 $total_copies_available = (new book($db))
@@ -33,10 +33,10 @@ $total_copies_available = (new book($db))
 
 $layout->add(['Label', 'Books available to rent: ', 'detail'=>$total_copies_available->getOne()]);
 
-// Next lets show students and how many books they have borrowed. 
+// Next lets show students and how many books they have borrowed.
 
 
-$students = new student($db); 
+$students = new student($db);
 
 // I can add some fields here, btw, but copy them into init() to make permanent.
 
@@ -74,7 +74,7 @@ $layout->add('Table')->setModel($students, ['name', 'total_borrowed']);
 
 // Those numbers actually include returned books also. So how do we calculate books that are currently
 // rented? First thing you must create is new relation! Because formulas always traverse relations
-// to get values. 
+// to get values.
 
 // borrow which is NOT returned yet!
 class rented extends borrow {
@@ -85,7 +85,7 @@ class rented extends borrow {
 }
 
 // now class rented is a special type of borrow which wasn't returned. We can say that student
-// is related to this entity also. 
+// is related to this entity also.
 
 $students->hasMany('OnHand', [new rented(), 'their_field'=>'student_id'])
     ->addField('not_returned', ['aggregate'=>'sum', 'field'=>'quantity']);

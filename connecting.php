@@ -17,6 +17,9 @@ if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
 }
 class student extends \atk4\data\Model {
 	public $table = 'students';
+
+  public $login_field = 'name';
+  public $password_field = 'password';
 function init() {
 	parent::init();
 	$this->addField('name',['required'=>'true']);
@@ -50,11 +53,11 @@ function init() {
   	parent::init();
   	$this->addField('date_loan',['type'=>'date','required'=>'true']);
   	$this->addField('date_return',['type'=>'date','required'=>'true']);
-  	$this->addField('returned', ['type'=>'boolean']);
+    If ($_SESSION['status'] != 'student') {
+        $this->addField('returned', ['type'=>'boolean']);
+    }
     $this->addField('quantity',['required'=>'true']);
-    $this->hasOne('book_id', new book())
-        ->addTitle();
-    $this->hasOne('student_id', new student())
-        ->addTitle();
+    $this->hasOne('book_id', new book())->addTitle();
+    $this->hasOne('student_id', new student())->addTitle();
   }
 }

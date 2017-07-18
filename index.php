@@ -27,12 +27,12 @@ $button->set('Log in');
 $button->set(['primary'=>true]);
 $button->set(['size big'=>true]);
 $button->link('login.php');
-$app->add($button); */
+$app->add($button);*/
 
 $form = $app->layout->add('Form');
 $form->setModel(new student($db));
 $form->onSubmit(function($form) {
-  
+
 $_SESSION['name'] = $form->model['name'];
 
 if ($form->model['name'] == 'librarian') {
