@@ -22,12 +22,12 @@ function init() {
 
 $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', ''); */
 
-/*$button = new Button();
+$button = new Button();
 $button->set('Log in');
 $button->set(['primary'=>true]);
 $button->set(['size big'=>true]);
 $button->link('login.php');
-$app->add($button);*/
+$app->add($button);
 
 $form = $app->layout->add('Form');
 $form->setModel(new student($db));
