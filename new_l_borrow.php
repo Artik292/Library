@@ -70,10 +70,8 @@ $layout->leftMenu->addItem(['List of books','icon'=>'book'],['new_l_book']);
 $layout->leftMenu->addItem(['List of students','icon'=>'users'],['new_l_student']);
 $layout->leftMenu->addItem(['List of borrows','icon'=>'browser'],['new_l_borrow']);
 $layout->leftMenu->addItem(['Rent book(s)','icon'=>'external'],['rent']);
+$layout->leftMenu->addItem(['Sign out','icon'=>'sign_out'],['logout']);
 
-$form = $app->layout->add('Form');
-$form->setModel(new borrow($db));
-$form->onSubmit(function($form) {
-$form->model->save();
-return new \atk4\ui\jsExpression('document.location = "main.php" ');
-});
+$grid = $layout->add('CRUD');
+$grid->setModel(new borrow($db));
+$grid->addQuickSearch(['book','student']);
