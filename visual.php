@@ -22,6 +22,7 @@ if ($_SESSION['status'] == 'librarian') {
   $layout->leftMenu->addItem(['Rent book(s)','icon'=>'book'],['rent']);
 
   $layout->leftMenu->addItem(['Borrowers','icon'=>'users'],['borrowers']);
+
 } else {
 
   $layout->leftMenu->addItem(['My loans','icon'=>'book'],['new_s_main']);
