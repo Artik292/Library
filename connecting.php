@@ -33,6 +33,7 @@ function init() {
   $this->addField('password',['type'=>'password','required'=>'true']);
 }
 }
+
 class book extends \atk4\data\Model {
 	public $table = 'book';
   public $title_field = 'book_title';

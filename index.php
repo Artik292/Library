@@ -9,7 +9,7 @@ use \atk4\ui\Button;
 $app = new \atk4\ui\App('Log-in');
 $app->initLayout('Centered');
 
-//$app->layout->add(new LoginForm());
+//$app->layout->add(new LoginForm();
 
 /*$app->auth = $app->add(new \atk4\login\Auth(new \atk4\login\student($app->db)));
 $app->auth->setUp(); // just run once */

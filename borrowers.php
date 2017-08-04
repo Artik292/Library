@@ -5,4 +5,4 @@
 
  $grid = $layout->add('CRUD');
  $grid->setModel(new borrow($db));
- //$grid->addQuickSearch(['name','author']);
+ $grid->addQuickSearch(['student','book']);
