@@ -2,10 +2,10 @@
 
 require 'vendor/autoload.php';
 
-session_start();
+/*session_start();
 if ((!isset($_SESSION['user_id']))) {
   header('Location: logout.php');
-}
+} */
 
 if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     preg_match('|([a-z]+)://([^:]*)(:(.*))?@([A-Za-z0-9\.-]*)(/([0-9a-zA-Z_/\.]*))|',

@@ -15,20 +15,16 @@ $layout = $app->layout;
 
 $layout->leftMenu->addItem(['Main page','icon'=>'building'],['main']);
 
-if ($_SESSION['status'] == 'admin') {
+if ($_SESSION['status'] == 'librarian') {
+
   $layout->leftMenu->addItem(['Users','icon'=>'users'],['admin']);
+
+  $layout->leftMenu->addItem(['Rent book(s)','icon'=>'book'],['rent']);
+
+  $layout->leftMenu->addItem(['Borrowers','icon'=>'users'],['borrowers']);
+} else {
+
+  $layout->leftMenu->addItem(['My loans','icon'=>'book'],['new_s_main']);
 }
 
-/*if ($_SESSION['status'] != 'student') {
-  $layout->leftMenu->addItem(['New book','icon'=>'add circle'],['new_book']);
-} */
-
-$layout->leftMenu->addItem(['Rent book(s)','icon'=>'book'],['rent']);
-
-$layout->leftMenu->addItem(['Borrowers','icon'=>'users'],['borrowers']);
-
-$layout->leftMenu->addItem(['Logout','icon'=>'external'],['logout']);
-
-$layout->leftMenu->addItem(['Romans','icon'=>'external'],['romans']);
-
-$layout->leftMenu->addItem(['test','icon'=>'external'],['new_s_main']);
+  $layout->leftMenu->addItem(['Logout','icon'=>'external'],['logout']);

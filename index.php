@@ -1,48 +1,49 @@
 <?php
 
-require 'vendor/autoload.php';
 require 'connecting.php';
+require 'vendor/autoload.php';
+//require 'LoginForm.php';
 
 use \atk4\ui\Button;
 
-$app = new \atk4\ui\App('Registration');
+$app = new \atk4\ui\App('Log-in');
 $app->initLayout('Centered');
 
-/* class student extends \atk4\data\Model {
-	public $table = 'students';
+//$app->layout->add(new LoginForm());
 
-function init() {
-	parent::init();
-	$this->addField('name');
-  $this->addField('surname');
-  $this->addField('grade');
-  $this->addField('password', ['type'=>'password']);
-}
-}
+/*$app->auth = $app->add(new \atk4\login\Auth(new \atk4\login\student($app->db)));
+$app->auth->setUp(); // just run once */
 
-$db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', ''); */
 
-$button = new Button();
-$button->set('Log in');
-$button->set(['primary'=>true]);
-$button->set(['size big'=>true]);
-$button->link('login.php');
-$app->add($button);
+
+
+/*$form = $app->layout->add('Form');
+$form->setModel(new student($db));
+$form->onSubmit(function($form) {
+
+        $form->student->tryLoadBy('name', $form->model['name']);
+             if ($form->student['password'] == $form->model['password']) {
+                 // Auth successful!
+                 $_SESSION['user_id'] = $form->student->id;
+
+                 return new \atk4\ui\jsExpression('document.location="dashboard.php"');
+             } else {
+                 $form->student->unload();
+                 return $form->error('password', 'No such user');
+             }
+
+return new \atk4\ui\jsExpression('document.location = "main.php" ');
+}); */
 
 $form = $app->layout->add('Form');
 $form->setModel(new student($db));
 $form->onSubmit(function($form) {
 
-$_SESSION['name'] = $form->model['name'];
+  if ($form->model['name'] == 'librarian') {
+    $_SESSION['status'] = 'librarian';
+  } else {
+    $_SESSION['status'] = 'student';
+  }
 
-if ($form->model['name'] == 'librarian') {
-  $_SESSION['status'] = 'librarian';
-} elseif ($form->model['name'] == 'admin') {
-  $_SESSION['status'] = 'admin';
-} else {
-  $_SESSION['status'] = 'student';
-}
-
-$form->model->save();
 return new \atk4\ui\jsExpression('document.location = "main.php" ');
 });
