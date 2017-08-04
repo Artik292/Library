@@ -29,7 +29,7 @@ function init() {
 	$this->addField('name',['required'=>'true']);
 	$this->addField('surname',['required'=>'true']);
 	$this->addField('grade',['required'=>'true']);
-  $this->addField('nickname');
+  $this->addField('nickname',['required'=>'true']);
   $this->addField('password',['type'=>'password','required'=>'true']);
 }
 }
