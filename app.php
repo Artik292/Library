@@ -98,6 +98,7 @@ class LibraryAdmin extends Library {
         $this->layout->leftMenu->addItem(['Dashboard','icon'=>'dashboard'],['index']);
         $this->layout->leftMenu->addItem(['Students','icon'=>'users'],['students']);
         $this->layout->leftMenu->addItem(['All Books','icon'=>'book'],['books']);
+        $this->layout->leftMenu->addItem(['Librarian Admin','icon'=>'key'],['admin']);
     }
 }
 
@@ -113,6 +114,7 @@ class Student extends \atk4\data\Model {
         // Declaration of basic fields
         $this->addField('name', ['required'=>true]);
         $this->addField('grade', ['required'=>true]);
+        $this->addField('contact', ['required'=>true, 'type'=>'text']);
         $this->addField('password', ['type'=>'password', 'required'=>true]);
 
         // Referencing all the check outs students have made
@@ -133,7 +135,9 @@ class Book extends \atk4\data\Model {
         $this->addField('total_quantity', ['required'=>true]);
 
         // Referencing all the check outs of this book
-        $this->hasMany('CheckOut', new CheckOut())
+        $this->hasMany('CheckOut', new CheckOut());
+
+        $this->hasMany('CheckOut_NotReturned', (new CheckOut($this->persistence))->addCondition('returned', false))
             ->addField('checked_out', ['aggregate'=>'count', 'field'=>false]);
 
         $this->addExpression('available', '[total_quantity] - [checked_out]');
@@ -146,7 +150,6 @@ class Librarian extends \atk4\data\Model {
     function init() {
         parent::init();
         $this->addField('name', ['required'=>true]);
-        $this->addField('surname', ['required'=>true]);
         $this->addField('password', ['type'=>'password','required'=>true]);
 
         // Referencing all the check outs authorized by this librarian
@@ -167,13 +170,14 @@ class CheckOut extends \atk4\data\Model {
         $this->addField('date_return',['caption'=>'Return Due', 'type'=>'date','required'=>true, 'default'=>new \DateTime('+1 month')]);
 
         // Will be set to true, once the book is returned
-        $this->addField('returned', ['type'=>'boolean', 'default'=>true]);
+        $this->addField('returned', ['type'=>'boolean', 'default'=>false]);
 
         $this->hasOne('book_id', new Book())
             ->addTitle();
 
-        $this->hasOne('student_id', new Student())
-            ->addTitle();
+        $st = $this->hasOne('student_id', new Student());
+        $st->addTitle();
+        $st->addField('student_contact', 'contact');
 
         $this->hasOne('librarian_id', new Librarian())
             ->addTitle();

@@ -70,7 +70,18 @@ $form = $c_right->add(['Form']);
 $form->setModel(new Book($app->db), false);
 $form_group = $form->addGroup(['width'=>'two']);
 $form_group->addField('name');
-$form_group->addField('copies', 'Number of copies');
+$copies_field = $form_group->addField('copies', 'Number of copies');
 $form->buttonSave->set('Check copies');
+
+$form->onSubmit(function($form) use ($app, $copies_field) {
+    $book = new Book($app->db);
+    $book->tryLoadBy('name', $form->model['name']);
+
+    if (!$book->loaded()) {
+        return $form->error('name', 'no book with this name in the library');
+    }
+
+    return $copies_field->jsInput()->val($book['available']);
+});
 
 

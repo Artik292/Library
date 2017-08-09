@@ -31,7 +31,7 @@ $overdue = new CheckOut($app->db);
 $overdue->addCondition('date_return', '<', new \DateTime());
 
 $grid = $col_seg->add('Table');
-$grid->setModel($overdue, ['book', 'student', 'date_return']);
+$grid->setModel($overdue, ['book', 'student', 'student_contact', 'date_return']);
 
 $grid->addColumn('book', ['TableColumn/Link', 'page'=>'checkout', 'args'=>['checkout_id'=>'id', 'student_id']]);
 $grid->addColumn('student', ['TableColumn/Link', 'page'=>'student', 'args'=>['student_id']]);
