@@ -48,6 +48,10 @@ class Library extends \atk4\ui\App {
         return true;
     }
 
+    function logoutLibrarian() {
+        unset($_SESSION['logged_librarian_id']);
+    }
+
     function loginAsStudent($name, $password) {
         $m = new Student($this->db);
         $m->tryLoadBy('name', $name);
@@ -60,6 +64,10 @@ class Library extends \atk4\ui\App {
         // Login successful. Let's store ID in session
         $this->logged_student = $m;
         $_SESSION['logged_student_id'] = $m->id;
+    }
+
+    function logoutSTudent() {
+        unset($_SESSION['logged_student_id']);
     }
 }
 
