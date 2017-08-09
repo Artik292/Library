@@ -9,13 +9,6 @@ class Library extends \atk4\ui\App {
 
     public $logged_librarian = null;
     public $logged_student = null;
-    public $cdn = [
-        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.10/public',
-        'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
-        'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
-        'calendar'        => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
-    ];
 
     function __construct() {
         parent::__construct('Library');
