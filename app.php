@@ -6,17 +6,83 @@ require 'vendor/autoload.php';
  * Implements a library web application main class
  */
 class Library extends \atk4\ui\App {
-    public $title = 'Library';
 
-    function init() {
-        parent::init();
+    public $logged_librarian = null;
+    public $logged_student = null;
+
+    function __construct() {
+        parent::__construct('Library');
+
+        if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
+            $this->db = new \atk4\data\Persistence_SQL($_ENV['CLEARDB_DATABASE_URL']);
+        } else {
+            $this->db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=library;charset=utf8', 'root', 'root');
+        }
 
         session_start();
-        if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
-            $db = new \atk4\data\Persistence_SQL($_ENV['CLEARDB_DATABASE_URL']);
-        } else {
-            $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=library;charset=utf8', 'root', 'root');
+        if (isset($_SESSION['logged_librarian_id'])) {
+            $this->logged_librarian = new Librarian($this->db);
+            $this->logged_librarian->load($_SESSION['logged_librarian_id']);
         }
+
+        if (isset($_SESSION['logged_student_id'])) {
+            $this->logged_student = new Librarian($this->db);
+            $this->logged_student->load($_SESSION['logged_student_id']);
+        }
+
+    }
+
+
+    function loginAsLibrarian($name, $password) {
+        $m = new Librarian($this->db);
+        $m->tryLoadBy('name', $name);
+
+        // Incorrect password for this librarian
+        if ($m['password'] != $password) {
+            return false;
+        }
+
+        // Login successful. Let's store ID in session
+        $this->logged_librarian = $m;
+        $_SESSION['logged_librarian_id'] = $m->id;
+        return true;
+    }
+
+    function loginAsStudent($name, $password) {
+        $m = new Student($this->db);
+        $m->tryLoadBy('name', $name);
+
+        // Incorrect password for this librarian
+        if ($m['password'] != $password) {
+            return false;
+        }
+
+        // Login successful. Let's store ID in session
+        $this->logged_student = $m;
+        $_SESSION['logged_student_id'] = $m->id;
+    }
+}
+
+/**
+ * Extend our basic application to include administrator interface
+ */
+class LibraryAdmin extends Library {
+    function __construct() {
+        parent::__construct();
+
+        if (!$this->logged_librarian) {
+            throw new Exception('Must be logged as librarian to use admin');
+        }
+
+        $this->initLayout('Admin');
+
+        $this->layout->rightMenu->addItem('Logged as librarian '.$this->logged_librarian['name']);
+        $this->layout->rightMenu->addItem('logout', ['logout']);
+
+        // Admin system needs a menu
+        $this->layout->leftMenu->addItem(['Dashboard','icon'=>'dashboard'],['index']);
+        $this->layout->leftMenu->addItem(['Students','icon'=>'users'],['students']);
+        $this->layout->leftMenu->addItem(['All Books','icon'=>'book'],['books']);
     }
 }
 
