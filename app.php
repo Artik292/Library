@@ -2,19 +2,23 @@
 
 require 'vendor/autoload.php';
 
+/**
+ * Implements a library web application main class
+ */
+class Library extends \atk4\ui\App {
+    public $title = 'Library';
 
-// Set up things which we will need on all of our pages, such as database connection,
-// session and the application.
-$app = new \atk4\ui\App('Librray');
-session_start();
-if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
-    $db = new \atk4\data\Persistence_SQL($_ENV['CLEARDB_DATABASE_URL']);
-} else {
-    $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=library;charset=utf8', 'root', 'root');
+    function init() {
+        parent::init();
+
+        session_start();
+        if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
+            $db = new \atk4\data\Persistence_SQL($_ENV['CLEARDB_DATABASE_URL']);
+        } else {
+            $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=library;charset=utf8', 'root', 'root');
+        }
+    }
 }
-
-
-// Declare classes for our models, which we will use in our application
 
 /**
  * Describes school student who will be allowed to check out books from the library.
