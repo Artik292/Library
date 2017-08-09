@@ -62,6 +62,10 @@ $form_group = $form->addGroup(['width'=>'two']);
 $form_group->addField('name');
 $form_group->addField('password');
 
+$form->onSubmit(function($form) { 
+    return 'not implemented';
+});
+
 
 $c_right = $columns->addColumn()->add(['ui'=>'segment']);
 $c_right->add(['Label', 'Search for a book', 'gray top attached']);
