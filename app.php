@@ -9,6 +9,13 @@ class Library extends \atk4\ui\App {
 
     public $logged_librarian = null;
     public $logged_student = null;
+    public $cdn = [
+        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.10/public',
+        'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
+        'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
+        'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
+        'calendar'        => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+    ];
 
     function __construct() {
         parent::__construct('Library');
@@ -84,8 +91,8 @@ class LibraryAdmin extends Library {
 
         $this->initLayout('Admin');
 
-        $this->layout->rightMenu->addItem('Logged as librarian '.$this->logged_librarian['name']);
-        $this->layout->rightMenu->addItem('logout', ['logout']);
+        $this->layout->menuRight->addItem('Logged as librarian '.$this->logged_librarian['name']);
+        $this->layout->menuRight->addItem('logout', ['logout']);
 
         // Admin system needs a menu
         $this->layout->leftMenu->addItem(['Dashboard','icon'=>'dashboard'],['index']);
@@ -126,7 +133,10 @@ class Book extends \atk4\data\Model {
         $this->addField('total_quantity', ['required'=>true]);
 
         // Referencing all the check outs of this book
-        $this->hasMany('CheckOut', new CheckOut());
+        $this->hasMany('CheckOut', new CheckOut())
+            ->addField('checked_out', ['aggregate'=>'count', 'field'=>false]);
+
+        $this->addExpression('available', '[total_quantity] - [checked_out]');
     }
 }
 
@@ -151,13 +161,13 @@ class CheckOut extends \atk4\data\Model {
         parent::init();
 
         // Date when the book was checked out from the library
-        $this->addField('date_checked_out', ['type'=>'date','required'=>true]);
+        $this->addField('date_checked_out', ['type'=>'date','required'=>true, 'default'=>new \DateTime()]);
 
         // Date when book is due to be returned
-        $this->addField('date_return',['type'=>'date','required'=>'true']);
+        $this->addField('date_return',['caption'=>'Return Due', 'type'=>'date','required'=>true, 'default'=>new \DateTime('+1 month')]);
 
         // Will be set to true, once the book is returned
-        $this->addField('returned', ['type'=>'boolean']);
+        $this->addField('returned', ['type'=>'boolean', 'default'=>true]);
 
         $this->hasOne('book_id', new Book())
             ->addTitle();
@@ -167,5 +177,11 @@ class CheckOut extends \atk4\data\Model {
 
         $this->hasOne('librarian_id', new Librarian())
             ->addTitle();
+    }
+
+    function returnBook() {
+        $this['returned'] = true;
+        $this['date_return'] = new DateTime();   // set to today
+        $this->save();
     }
 }
