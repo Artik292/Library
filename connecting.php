@@ -1,20 +1,13 @@
 <?php
 require 'vendor/autoload.php';
 session_start();
-if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
-    preg_match('|([a-z]+)://([^:]*)(:(.*))?@([A-Za-z0-9\.-]*)(/([0-9a-zA-Z_/\.]*))|',
-        $_ENV['CLEARDB_DATABASE_URL'],$matches);
-    $dsn=array(
-        $matches[1].':host='.$matches[5].';dbname='.$matches[7],
-        $matches[2],
-        $matches[4]
-    );
-    $db = new \atk4\data\Persistence_SQL($dsn[0].';charset=utf8', $dsn[1], $dsn[2]);
-} else {
-    //$db = \atk4\db\Persistence::connect('mysql://user:pass@localhost/main');
-    //$db = \atk4\db\Persistence::connect('mysql://user:pass@localhost/mydb');
-    $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
-}
+
+	if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
+            $db = \atk4\data\Persistence::connect($_ENV['CLEARDB_DATABASE_URL']);
+        } else {
+            $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
+        }
+
 class student extends \atk4\data\Model {
 	public $table = 'students';
 function init() {
