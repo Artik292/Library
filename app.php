@@ -14,19 +14,11 @@ class Library extends \atk4\ui\App {
         parent::__construct('Library');
 
         if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
-          preg_match('|([a-z]+)://([^:]*)(:(.*))?@([A-Za-z0-9\.-]*)(/([0-9a-zA-Z_/\.]*))|',
-          $_ENV['CLEARDB_DATABASE_URL'],$matches);
-          $dsn=array(
-            $matches[1].':host='.$matches[5].';dbname='.$matches[7],
-            $matches[2],
-            $matches[4]
-          );
-          $db = new \atk4\data\Persistence_SQL($dsn[0].';charset=utf8', $dsn[1], $dsn[2]);
+            $db = \atk4\data\Persistence::connect($_ENV['CLEARDB_DATABASE_URL']);
         } else {
-           $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
-            //$this->db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=library;charset=utf8', 'root', 'root');
+            $db = new \atk4\data\Persistence_SQL('mysql:host=127.0.0.1;dbname=mydb;charset=utf8', 'root', '');
         }
-
+       
         session_start();
         if (isset($_SESSION['logged_librarian_id'])) {
             $this->logged_librarian = new Librarian($this->db);
