@@ -9,7 +9,7 @@ session_start();
         }
 
 class student extends \atk4\data\Model {
-	public $table = 'students';
+	public $table = 'student';
 function init() {
 	parent::init();
 	$this->addField('name',['required'=>'true']);
@@ -19,7 +19,7 @@ function init() {
 }
 }
 class book extends \atk4\data\Model {
-	public $table = 'books';
+	public $table = 'book';
 function init() {
 	parent::init();
 	$this->addField('name',['caption'=>'Book title','required'=>'true']);
@@ -29,7 +29,7 @@ function init() {
 }
 }
 class librarian extends \atk4\data\Model {
-	public $table = 'librarians';
+	public $table = 'librarian';
 function init() {
 	parent::init();
 	$this->addField('name',['required'=>'true']);
@@ -38,16 +38,14 @@ function init() {
 }
 }
   class borrow extends \atk4\data\Model {
-  	public $table = 'borrow';
+  	public $table = 'checkout';
   function init() {
   	parent::init();
-  	$this->addField('date_loan',['type'=>'date','required'=>'true']);
+  	$this->addField('date_checked_out',['type'=>'date','required'=>'true']);
   	$this->addField('date_return',['type'=>'date','required'=>'true']);
   	$this->addField('returned', ['type'=>'boolean']);
-    $this->addField('quantity',['required'=>'true']);
-    $this->hasOne('book_id', new book())
-        ->addTitle();
-    $this->hasOne('student_id', new student())
-        ->addTitle();
+    	$this->addField('quantity',['required'=>'true']);
+   	$this->hasOne('book_id', new book())->addTitle();
+    	$this->hasOne('student_id', new student())->addTitle();
   }
 }
