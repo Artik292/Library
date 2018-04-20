@@ -26,7 +26,7 @@ function init() {
 	$this->addField('name',['caption'=>'Название книги','required'=>'true']);
 	$this->addField('author',['caption'=>'Автор']);
 	$this->addField('year_published',['caption'=>'Год выпуска','type'=>'date']);
-  $this->addField('total_quantity',['caption'=>'Количество','mandatroy'=>TRUE]);
+  $this->addField('total_quantity',['caption'=>'Количество']);
 	$this->hasMany('Borrow', new Borrow);
 }
 }
