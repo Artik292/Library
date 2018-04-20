@@ -12,7 +12,7 @@ class Student extends \atk4\data\Model {
 	public $table = 'student';
 function init() {
 	parent::init();
-	$this->addField('name',['caption'=>'Имя','required'=>'true']);
+	$this->addField('name',['caption'=>'Имя','mandatroy'=>'true']);
 	$this->addField('surname',['caption'=>'Фамилия','required'=>'true']);
 	$this->addField('grade',['caption'=>'Класс','required'=>'true']);
   $this->addField('password',['caption'=>'Пароль','type'=>'password','required'=>'true']);
