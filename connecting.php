@@ -12,7 +12,7 @@ class Student extends \atk4\data\Model {
 	public $table = 'student';
 function init() {
 	parent::init();
-	$this->addField('name',['caption'=>'Имя','mandatroy'=>'true']);
+	$this->addField('name',['caption'=>'Имя','required'=>'true']);
 	$this->addField('surname',['caption'=>'Фамилия','required'=>'true']);
 	$this->addField('grade',['caption'=>'Класс','required'=>'true']);
   $this->addField('password',['caption'=>'Пароль','type'=>'password','required'=>'true']);
@@ -26,7 +26,7 @@ function init() {
 	$this->addField('name',['caption'=>'Название книги','required'=>'true']);
 	$this->addField('author',['caption'=>'Автор']);
 	$this->addField('year_published',['caption'=>'Год выпуска','type'=>'date']);
-  $this->addField('total_quantity',['caption'=>'Количество']);
+  $this->addField('total_quantity',['caption'=>'Количество','mandatroy'=>TRUE]);
 	$this->hasMany('Borrow', new Borrow);
 }
 }
