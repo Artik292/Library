@@ -15,6 +15,7 @@ $layout = $app->layout;
 
 if ($_SESSION['status'] == 'admin') {
   $layout->leftMenu->addItem(['Главная страница','icon'=>'plus square'],['main_lib']);
+  $layout->leftMenu->addItem(['Возврат книги','icon'=>'calendar alternate'],['return']);
   $layout->leftMenu->addItem(['Читатели','icon'=>'users'],['admin']);
   $layout->leftMenu->addItem(['Библиотекари','icon'=>'address card'],['list_lib']);
   $layout->leftMenu->addItem(['Книги','icon'=>'add circle'],['new_book']);

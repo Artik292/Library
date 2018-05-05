@@ -6,6 +6,11 @@ $form = $app->layout->add('Form');
 $form->setModel(new Borrow($db),['book_id','quantity','student_id','date_checked_out','date_return']);
 $form->buttonSave->set('Оформить');
 $form->onSubmit(function($form) use($db) {
+  if ($form->model['quantity'] <= 0) {
+      $er = (new \atk4\ui\jsNotify('Книг должно быть положительное количество!'));
+      $er->setColor('red');
+      return $er;
+  }
   $book = new Book($db);
   $book->load($form->model['book_id']);
   if ($form->model['quantity']>$book['total_quantity']) {
@@ -16,7 +21,7 @@ $form->onSubmit(function($form) use($db) {
     } elseif ($we_have == '1') {
         $er = (new \atk4\ui\jsNotify('Есть только 1 книга.'));
     } else {
-        $er = (new \atk4\ui\jsNotify('Столько нет, есть только ',$we_have,' .'));
+        $er = (new \atk4\ui\jsNotify('Столько нет, есть только '.$we_have.' .'));
     }
     $er->setColor('red');
     return $er;
