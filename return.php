@@ -4,8 +4,9 @@ require 'visual.php';
 
 $mag = $app->add(['Wizard']);
 $mag->buttonNext->set('Дальше');
+//var_dump($mag);
 
-$mag->addStep('Кто возвращает', function ($app) use($db) {
+$mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) use($db) {
     $app->add(['Message', 'Выбирете того, кто возвращает книгу']);
     $form = $app->add('Form');
     $form->addField('name', 'Имя', ['required'=>true])->placeholder = 'Иван';
@@ -13,9 +14,9 @@ $mag->addStep('Кто возвращает', function ($app) use($db) {
     $form->onSubmit(function ($form) use ($app,$db) {
         $someone = new Student($db);
         $someone->tryLoadBy('name',$form->model['name']);
-        if ($someone('surname') == $form->model['surname']) {
+        if ($someone['surname'] == $form->model['surname']) {
           $app->memorize('person', $someone->id);
-          $someone-unload();
+          $someone->unload();
           $_SESSION['good'] = 'yes';
           return $app->jsNext();
         } else {
@@ -38,14 +39,17 @@ $mag->addStep('Кто возвращает', function ($app) use($db) {
 // form on "Next" button click, performing validation and submission. You do not need
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
-$mag->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($app) {
-    $f = $app->add('Form');
-    $f->addField('dsn', 'Connect DSN', ['required'=>true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
-    $f->onSubmit(function ($f) use ($app) {
-        $app->memorize('dsn', $f->model['dsn']);
-        return $app->jsNext();
-    });
+$mag->addStep(['Что возращает', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($app) use($mag,$db) {
+  $mag->buttonPrev->set('Назад');
+  $grid = $app->add('Grid');
+  $someone = new Student($db);
+  $someone->load($app->recall('person'));
+  $bor = $someone->ref('Borrow');
+  $bor->setOrder('returned');
+  $grid->setModel($bor,['returned','book']);
 });
+
+
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
@@ -92,3 +96,4 @@ $mag->addFinish(function ($app) {
     $app->add(['Header', 'You are DONE', 'huge centered']);
 });
  */
+$mag->buttonFinish->set('Закончить');

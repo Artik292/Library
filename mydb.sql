@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 -- Структура таблицы `books`
 --
 
-CREATE TABLE `books` (
+CREATE TABLE `book` (
   `id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `author` varchar(50) DEFAULT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE `borrow` (
 
 INSERT INTO `borrow` (`id`, `date_loan`, `date_return`, `quantity`, `returned`, `student_id`, `book_id`) VALUES
 (1, '2017-07-11 00:00:00', '2017-07-18 00:00:00', 1, '', 26, 1),
-(2, '2017-07-11 00:00:00', '2017-07-18 00:00:00', 4, 'no', 24, 1);
+(2, '2017-07-11 00:00:00', '2017-07-18 00:00:00', 2, 'no', 24, 1);
 
 -- --------------------------------------------------------
 
@@ -75,7 +75,7 @@ INSERT INTO `borrow` (`id`, `date_loan`, `date_return`, `quantity`, `returned`, 
 -- Структура таблицы `librarians`
 --
 
-CREATE TABLE `librarians` (
+CREATE TABLE `librarian` (
   `id` int(11) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `surname` varchar(45) DEFAULT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `librarians` (
 -- Структура таблицы `students`
 --
 
-CREATE TABLE `students` (
+CREATE TABLE `student` (
   `id` int(11) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `surname` varchar(45) DEFAULT NULL,
@@ -101,38 +101,8 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `name`, `surname`, `grade`, `password`) VALUES
-(1, 'в', 'в', 'в', 'd'),
-(2, 'ю', 'ю', 'ю', '.'),
-(3, 'ж', 'ж', 'ж', ';'),
-(4, 'l', 'll', 'l', 'l'),
-(5, 'a', 'a', 'a', 'a'),
-(6, 'd', 'd', 'd', 'd'),
-(7, 'ko', 'ko', 'kok', 'ko'),
-(8, 'd', '', '', 'd'),
-(9, 'p', 'p', 'p', 'p'),
-(10, 'admin', '', '', 'admin'),
-(11, 'admin', '', '', 'l'),
-(12, 'admin', '', '', 'j'),
-(13, 'admin', '', '', 'd'),
-(14, 'admin', '', '', 'd'),
-(15, 'admin', '', '', 'Lolol'),
-(16, 'admin', '', '', 'admin'),
-(17, 'name', '', '', 'password'),
-(18, 'admin', '', '', 'admin'),
-(19, 'admin', '', '', 'a'),
-(20, 'admin', '', '', 'kl'),
-(21, 'awdaw', '', '', 'awdaw'),
-(22, 'lol', '', '', 'lol'),
-(23, 'admin', '', '', 'admin'),
-(24, 'a', 'b', 'c', 'e'),
-(25, 'Д', 'Д', 'Д', 'l'),
-(26, 'Arthur', 'Konevnikov', '11-b1', 'Password'),
-(27, 'admin', '', '', 'admin'),
-(28, 'admin', '', '', 'admin'),
-(29, 'librarian', '', '', 'lol'),
-(30, 'admin', '', '', 'l'),
-(31, 'librarian', '', '', 'm'),
-(32, 'd', '', '', 'd');
+(1, 'Arthur', 'Konevnikov', '11-b1', 'password'),
+(2, 'test', 'test', 'test', 'test'),
 
 --
 -- Индексы сохранённых таблиц
@@ -171,7 +141,7 @@ ALTER TABLE `students`
 --
 -- AUTO_INCREMENT для таблицы `books`
 --
-ALTER TABLE `books`
+ALTER TABLE `book`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `borrow`
@@ -181,13 +151,13 @@ ALTER TABLE `borrow`
 --
 -- AUTO_INCREMENT для таблицы `librarians`
 --
-ALTER TABLE `librarians`
+ALTER TABLE `librarian`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `students`
 --
-ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+ALTER TABLE `student`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -196,8 +166,8 @@ ALTER TABLE `students`
 -- Ограничения внешнего ключа таблицы `borrow`
 --
 ALTER TABLE `borrow`
-  ADD CONSTRAINT `fk_borrow_books1` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_borrow_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_borrow_books1` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_borrow_students` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
