@@ -40,13 +40,51 @@ $mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) us
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
 $mag->addStep(['Что возращает', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($app) use($mag,$db) {
-  $mag->buttonPrev->set('Назад');
+  /*$mag->buttonPrev->set('Назад');
   $grid = $app->add('Grid');
   $someone = new Student($db);
   $someone->load($app->recall('person'));
   $bor = $someone->ref('Borrow');
   $bor->setOrder('returned');
-  $grid->setModel($bor,['returned','book']);
+  $grid->setModel($bor,['returned','book']); */
+
+  $mag->buttonPrev->set('Назад');
+  $col = $app->add('Columns');
+  $col->addClass('stackable');
+  $c1 = $col->addColumn();
+  $c2 = $col->addColumn();
+  $c3 = $col->addColumn();
+  $c4 = $col->addColumn();
+  $someone = new Student($db);
+  $someone->load($app->recall('person'));
+  $books = $someone->ref('Borrow');
+  //$books = $book->ref('book_id');
+  $books->setOrder('returned');
+  $menu1 = $c1->add('Menu');
+  $menu1->addClass('vertical');
+  $menu2 = $c2->add('Menu');
+  $menu2->addClass('vertical');
+  $menu3 = $c3->add('Menu');
+  $menu3->addClass('vertical');
+  foreach ($books as $book_list) {
+      If ($book_list['returned']) {
+        $menu1->addItem('Возращена');
+      } else {
+        $menu1->addItem('Не возращена');
+      }
+      //$menu1->addItem($book_list['returned']);
+      //$date = DateTime::createFromFormat('j-F-Y',($book_list['date_return']));
+      //$date = date_create_from_format('j-F-Y', ($book_list['date_return']));
+      //$date = strlen($book_list['date_return']);
+      //$dates = new DateTime($book_list['date_return']);
+      //$date = $dates->format('j-F-Y');
+      echo $book_list['date_return'];
+      //$menu2->addItem(strlen($book_list['date_return']));
+      $menu2->addItem($date);
+      $book = new Book($db);
+      $book->load($book_list['book_id']);
+      $menu3->addItem($book['name']);
+  }
 });
 
 
