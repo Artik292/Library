@@ -7,7 +7,7 @@ $mag->buttonNext->set('Дальше');
 //var_dump($mag);
 
 $mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) use($db) {
-    $app->add(['Message', 'Выбирете того, кто возвращает книгу']);
+    $app->add(['Message', 'Выберите того, кто возвращает книгу']);
     $form = $app->add('Form');
     $form->addField('name', 'Имя', ['required'=>true])->placeholder = 'Иван';
     $form->addField('surname', 'Фамилия', ['required'=>true])->placeholder = 'Иванов';
@@ -39,7 +39,7 @@ $mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) us
 // form on "Next" button click, performing validation and submission. You do not need
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
-$mag->addStep(['Что возращает', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($app) use($mag,$db) {
+$mag->addStep(['Что возращает', 'icon'=>'book', 'description'=>'Выберите, какую книгу возращают'], function ($app) use($mag,$db) {
   /*$mag->buttonPrev->set('Назад');
   $grid = $app->add('Grid');
   $someone = new Student($db);
@@ -49,7 +49,21 @@ $mag->addStep(['Что возращает', 'icon'=>'configure', 'description'=>
   $grid->setModel($bor,['returned','book']); */
 
   $mag->buttonPrev->set('Назад');
-  $col = $app->add('Columns');
+
+  $someone = new Student($db);
+  $someone->load($app->recall('person'));
+  $borrow = $someone->ref('Borrow');
+  //$book = $borrow->ref('Book');
+  //$book->setOrder('returned');
+  $borrow->setOrder('returned');
+  $grid = $app->add('Grid');
+  $grid->setModel($borrow,['date_return','date_checked_out','returned','book','quantity']);
+  $grid->addDecorator('book', function ($borrow) use($app) {
+            //$app->memorize('book_id', $borrow['book_id']);
+            return $app->jsNext();
+  });
+
+  /*$col = $app->add('Columns');
   $col->addClass('stackable');
   $c1 = $col->addColumn();
   $c2 = $col->addColumn();
@@ -70,28 +84,33 @@ $mag->addStep(['Что возращает', 'icon'=>'configure', 'description'=>
       If ($book_list['returned']) {
         $menu1->addItem('Возращена');
       } else {
-        $menu1->addItem('Не возращена');
-      }
+        $menu1->addItem('Не возращена')->on('click', function ($button) {
+          return new \atk4\ui\jsExpression('document.location = "task.php" ');
+        });
+      } */
+      /*$time = $book_list['date_return'];
+      $time->format('j-F-Y');   Work on it!
+      $menu2->addItem($time); */
       //$menu1->addItem($book_list['returned']);
       //$date = DateTime::createFromFormat('j-F-Y',($book_list['date_return']));
       //$date = date_create_from_format('j-F-Y', ($book_list['date_return']));
       //$date = strlen($book_list['date_return']);
       //$dates = new DateTime($book_list['date_return']);
       //$date = $dates->format('j-F-Y');
-      echo $book_list['date_return'];
+      //echo $book_list['date_return'];
       //$menu2->addItem(strlen($book_list['date_return']));
-      $menu2->addItem($date);
-      $book = new Book($db);
-      $book->load($book_list['book_id']);
-      $menu3->addItem($book['name']);
-  }
+      //$menu2->addItem(gettype($book_list['date_return']));
+      //$book = new Book($db);
+      //$book->load($book_list['book_id']);
+      //$menu3->addItem($book['name']);
+  //}
 });
 
 
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
-/*$mag->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($app) {
+$mag->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($app) {
     if (isset($_GET['name'])) {
         $app->memorize('model', $_GET['name']);
         header('Location: '.$app->urlNext());
@@ -110,7 +129,7 @@ $mag->addStep(['Что возращает', 'icon'=>'configure', 'description'=>
 // Steps may contain interractive elements. You can disable navigational buttons
 // and enable them as you see fit. Use handy js method to trigger advancement to
 // the next step.
-$mag->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($app) {
+/*$mag->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($app) {
     $c = $app->add('Console');
     $app->buttonFinish->addClass('disabled');
     $c->set(function ($c) use ($app) {
