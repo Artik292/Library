@@ -6,7 +6,7 @@ $mag = $app->add(['Wizard']);
 $mag->buttonNext->set('Дальше');
 //var_dump($mag);
 
-$mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) use($db) {
+$mag->addStep(['Кто возвращает.','icon'=>'user'], function ($app) use($db) {
     $app->add(['Message', 'Выберите того, кто возвращает книгу']);
     $form = $app->add('Form');
     $form->addField('name', 'Имя', ['required'=>true])->placeholder = 'Иван';
@@ -15,7 +15,7 @@ $mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) us
         $someone = new Student($db);
         $someone->tryLoadBy('name',$form->model['name']);
         if ($someone['surname'] == $form->model['surname']) {
-          $app->memorize('person', $someone->id);
+          $app->memorize('person_id', $someone->id);
           $someone->unload();
           $_SESSION['good'] = 'yes';
           return $app->jsNext();
@@ -39,29 +39,31 @@ $mag->addStep(['Кто возвращает','icon'=>'user'], function ($app) us
 // form on "Next" button click, performing validation and submission. You do not need
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
-$mag->addStep(['Что возращает', 'icon'=>'book', 'description'=>'Выберите, какую книгу возращают'], function ($app) use($mag,$db) {
+$mag->addStep(['Что возращает.', 'icon'=>'book', 'description'=>'Выберите, какую книгу возращают.'], function ($app) use($mag,$db) {
   /*$mag->buttonPrev->set('Назад');
   $grid = $app->add('Grid');
   $someone = new Student($db);
-  $someone->load($app->recall('person'));
+  $someone->load($app->recall('person_id'));
   $bor = $someone->ref('Borrow');
   $bor->setOrder('returned');
   $grid->setModel($bor,['returned','book']); */
+  if (isset($_GET['id'])) {
+    $app->memorize('rent_id',$_GET['id']);
+    header('Location: '.$app->urlNext());
+    exit;
+  } else {
+    $mag->buttonPrev->set('Назад');
 
-  $mag->buttonPrev->set('Назад');
-
-  $someone = new Student($db);
-  $someone->load($app->recall('person'));
-  $borrow = $someone->ref('Borrow');
-  //$book = $borrow->ref('Book');
-  //$book->setOrder('returned');
-  $borrow->setOrder('returned');
-  $grid = $app->add('Grid');
-  $grid->setModel($borrow,['date_return','date_checked_out','returned','book','quantity']);
-  $grid->addDecorator('book', function ($borrow) use($app) {
-            //$app->memorize('book_id', $borrow['book_id']);
-            return $app->jsNext();
-  });
+    $someone = new Student($db);
+    $someone->load($app->recall('person_id'));
+    $borrow = $someone->ref('Borrow');
+    //$book = $borrow->ref('Book');
+    //$book->setOrder('returned');
+    $borrow->setOrder('returned');
+    $grid = $app->add('Grid');
+    $grid->setModel($borrow,['date_return','date_checked_out','returned','book','quantity']);
+    $grid->addDecorator('book',['Link',null,['id']]);
+  }
 
   /*$col = $app->add('Columns');
   $col->addClass('stackable');
@@ -70,7 +72,7 @@ $mag->addStep(['Что возращает', 'icon'=>'book', 'description'=>'Вы
   $c3 = $col->addColumn();
   $c4 = $col->addColumn();
   $someone = new Student($db);
-  $someone->load($app->recall('person'));
+  $someone->load($app->recall('person_id'));
   $books = $someone->ref('Borrow');
   //$books = $book->ref('book_id');
   $books->setOrder('returned');
@@ -110,21 +112,54 @@ $mag->addStep(['Что возращает', 'icon'=>'book', 'description'=>'Вы
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
-$mag->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($app) {
-    if (isset($_GET['name'])) {
-        $app->memorize('model', $_GET['name']);
-        header('Location: '.$app->urlNext());
-        exit;
-    }
-    $c = $app->add('Columns');
-    $mag = $c->addColumn()->add(['Grid', 'paginator'=>false, 'menu'=>false]);
-    $c->addColumn()->add(['Message', 'Information', 'info'])->text
-        ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
-    $mag->setSource(['Country', 'Stat']);
-    // should work after url() fix
-    $mag->addDecorator('name', ['Link', [], ['name']]);
-    //$mag->addDecorator('name', ['Link', [$app->stepCallback->name=>$app->currentStep], ['name']]);
-    $app->buttonNext->addClass('disabled');
+$mag->addStep(['Сколько книг возращает', 'description'=>'Выберите количество книг, которое возвращают.', 'icon'=>'calendar check'], function ($app) use ($db,$mag) {
+    $loan = new Borrow($db);
+    $loan->load($app->recall('rent_id'));
+    $someone = new Student($db);
+    $someone->load($app->recall('person_id'));
+    $app->add(['Message',$someone['name'].' '.$someone['surname'].' взял '.$loan['quantity'].' экземпляров '.$loan['book'].'. Сколько возвращенно?']);
+    $form = $app->add(['Form']);
+    $form->addField('count','Количество');
+    $form->onSubmit(function ($form) use ($app,$loan,$db)  {
+        if ($form->model['count'] <= 0) {
+          $er = (new \atk4\ui\jsNotify('Нельзя вернуть столько книг!'));
+          $er->setColor('red');
+          return $er;
+        } elseif ($form->model['count'] > $loan['quantity']) {
+          $er = (new \atk4\ui\jsNotify('Количество взятых книг меньше количества книг, которые возвращают!'));
+          $er->setColor('red');
+          return $er;
+        } elseif ($form->model['count'] < $loan['quantity']) {
+          $loan['quantity'] = $loan['quantity'] - $form->model['count'];
+          $book = new Book($db);
+          $book->load($loan['book_id']);
+          $book['total_quantity'] = $book['total_quantity'] + $form->model['count'];
+          $book->save();
+          $book->unload();
+          $loan->save();
+          $loan->unload();
+          $good = TRUE;
+          return (new \atk4\ui\jsExpression('document.location = "main_lib.php" '));
+        } else {
+          $loan['returned'] = TRUE;
+          $book = new Book($db);
+          $book->load($loan['book_id']);
+          $book['total_quantity'] = $book['total_quantity'] + $form->model['count'];
+          $book->save();
+          $book->unload();
+          $loan->save();
+          $loan->unload();
+          $good = TRUE;
+          return (new \atk4\ui\jsExpression('document.location = "main_lib.php" '));
+        }
+        /*if (isset($good)) {
+        header('Location: '.$app->urlFinish());
+      } */
+    });
+  #  $mag->addFinish(function ($app) {
+  #      $app->add(new \atk4\ui\jsExpression('document.location = "main_lib.php" '));
+  #      Header('Location: main_lib.php');
+  #  });
 });
 // Steps may contain interractive elements. You can disable navigational buttons
 // and enable them as you see fit. Use handy js method to trigger advancement to
